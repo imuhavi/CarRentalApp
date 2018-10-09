@@ -1,8 +1,11 @@
 package client;
 
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.util.Date;
 import java.util.List;
 
+import rental.ICarRentalCompany;
 import rental.Quote;
 import rental.Reservation;
 
@@ -15,6 +18,11 @@ public class Client extends AbstractTestBooking {
 	public static void main(String[] args) throws Exception {
 		
 		String carRentalCompanyName = "Hertz";
+		
+		System.setSecurityManager(null);
+		
+		Registry registry = LocateRegistry.getRegistry();
+		ICarRentalCompany crc = (ICarRentalCompany) registry.lookup(carRentalCompanyName);
 		
 		// An example reservation scenario on car rental company 'Hertz' would be...
 		Client client = new Client("simpleTrips", carRentalCompanyName);
