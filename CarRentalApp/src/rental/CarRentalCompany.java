@@ -179,4 +179,12 @@ public class CarRentalCompany implements ICarRentalCompany{
 		return out.toString();
 	}
 	
+	/*************
+	 * CARS *
+	 *************/
+
+	public Collection<Car> getAllCars() {
+		return cars;
+	}
+	
 }

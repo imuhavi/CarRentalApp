@@ -3,9 +3,11 @@ package client;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import rental.Car;
 import rental.CarType;
 import rental.ICarRentalCompany;
 import rental.Quote;
@@ -119,8 +121,17 @@ public class Client extends AbstractTestBooking {
 	 */
 	@Override
 	protected List<Reservation> getReservationsByRenter(String clientName) throws Exception {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("TODO");
+		List<Reservation> reservations = new ArrayList<Reservation>();
+		for (Car car: crc.getAllCars()){
+			for (Reservation reservation: car.getAllReservations()){
+				if (reservation.getCarRenter().equals(clientName)){
+					System.out.println("Cartype: " + reservation.getCarType() + " Car-ID: " + reservation.getCarId() + " Period: " + reservation.getStartDate() + " - " + reservation.getEndDate() + " Rentalprice: " + reservation.getRentalPrice() + ".");
+					reservations.add(reservation);
+				}
+			}
+		}
+		return reservations;
+//		throw new UnsupportedOperationException("TODO");
 	}
 
 	/**
@@ -135,7 +146,13 @@ public class Client extends AbstractTestBooking {
 	 */
 	@Override
 	protected int getNumberOfReservationsForCarType(String carType) throws Exception {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("TODO");
+		int i = 0;
+		for (Car car: crc.getAllCars()){
+			if (car.getType().equals(carType)){
+				i += car.getAllReservations().size();
+			}
+		}
+		return i;
+//		throw new UnsupportedOperationException("TODO");
 	}
 }
