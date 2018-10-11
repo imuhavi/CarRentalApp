@@ -44,7 +44,6 @@ public class Client extends AbstractTestBooking {
 		Registry registry = LocateRegistry.getRegistry();
 		crc = (ICarRentalCompany) registry.lookup(carRentalCompanyName);
 		
-//		throw new UnsupportedOperationException("TODO");
 	}
 	
 	/**
@@ -63,7 +62,6 @@ public class Client extends AbstractTestBooking {
 		for(CarType carType : crc.getAvailableCarTypes(start, end)){
 			System.out.println(carType.getName());
 		}
-//		throw new UnsupportedOperationException("TODO");
 	}
 
 	/**
@@ -90,7 +88,6 @@ public class Client extends AbstractTestBooking {
 
 		ReservationConstraints constraints = new ReservationConstraints(start, end, carType, region);
 		return crc.createQuote(constraints, clientName);
-//		throw new UnsupportedOperationException("TODO");
 	}
 
 	/**
@@ -106,7 +103,6 @@ public class Client extends AbstractTestBooking {
 	@Override
 	protected Reservation confirmQuote(Quote quote) throws Exception {
 		return crc.confirmQuote(quote);
-//		throw new UnsupportedOperationException("TODO");
 	}
 	
 	/**
@@ -125,13 +121,12 @@ public class Client extends AbstractTestBooking {
 		for (Car car: crc.getAllCars()){
 			for (Reservation reservation: car.getAllReservations()){
 				if (reservation.getCarRenter().equals(clientName)){
-					System.out.println("Cartype: " + reservation.getCarType() + " Car-ID: " + reservation.getCarId() + " Period: " + reservation.getStartDate() + " - " + reservation.getEndDate() + " Rentalprice: " + reservation.getRentalPrice() + ".");
+					System.out.println("Cartype: " + reservation.getCarType() + " \nCar-ID: " + reservation.getCarId() + " \nPeriod: " + reservation.getStartDate() + " - " + reservation.getEndDate() + " \nRentalprice: " + reservation.getRentalPrice() + ".");
 					reservations.add(reservation);
 				}
 			}
 		}
 		return reservations;
-//		throw new UnsupportedOperationException("TODO");
 	}
 
 	/**
@@ -148,11 +143,10 @@ public class Client extends AbstractTestBooking {
 	protected int getNumberOfReservationsForCarType(String carType) throws Exception {
 		int i = 0;
 		for (Car car: crc.getAllCars()){
-			if (car.getType().equals(carType)){
+			if (car.getType().getName().equals(carType)){
 				i += car.getAllReservations().size();
 			}
 		}
 		return i;
-//		throw new UnsupportedOperationException("TODO");
 	}
 }
