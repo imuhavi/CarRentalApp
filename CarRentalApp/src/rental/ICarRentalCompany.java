@@ -4,6 +4,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 public interface ICarRentalCompany extends Remote {
@@ -23,5 +24,9 @@ public interface ICarRentalCompany extends Remote {
 	public void cancelReservation(Reservation res) throws RemoteException;
 	
 	public Collection<Car> getAllCars() throws Exception;
+	
+	public List<Reservation> getReservationsByRenter(String clientName) throws RemoteException;
+	
+	public int getNumberOfReservationsForCarType(String carType) throws RemoteException;
 	
 }

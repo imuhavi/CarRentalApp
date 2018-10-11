@@ -1,5 +1,6 @@
 package rental;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -95,6 +96,16 @@ public class CarRentalCompany implements ICarRentalCompany{
 		return availableCarTypes;
 	}
 	
+	public int getNumberOfReservationsForCarType(String carType){
+		int i = 0;
+		for (Car car: getAllCars()){
+			if (car.getType().getName().equals(carType)){
+				i += car.getAllReservations().size();
+			}
+		}
+		return i;
+	}
+	
 	/*********
 	 * CARS *
 	 *********/
@@ -160,6 +171,18 @@ public class CarRentalCompany implements ICarRentalCompany{
 	public void cancelReservation(Reservation res) {
 		logger.log(Level.INFO, "<{0}> Cancelling reservation {1}", new Object[]{name, res.toString()});
 		getCar(res.getCarId()).removeReservation(res);
+	}
+	
+	public List<Reservation> getReservationsByRenter(String clientName){
+		List<Reservation> reservations = new ArrayList<Reservation>();
+		for (Car car: getAllCars()){
+			for (Reservation reservation: car.getAllReservations()){
+				if (reservation.getCarRenter().equals(clientName)){
+					reservations.add(reservation);
+				}
+			}
+		}
+		return reservations;
 	}
 	
 	@Override

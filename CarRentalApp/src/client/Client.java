@@ -117,16 +117,10 @@ public class Client extends AbstractTestBooking {
 	 */
 	@Override
 	protected List<Reservation> getReservationsByRenter(String clientName) throws Exception {
-		List<Reservation> reservations = new ArrayList<Reservation>();
-		for (Car car: crc.getAllCars()){
-			for (Reservation reservation: car.getAllReservations()){
-				if (reservation.getCarRenter().equals(clientName)){
-					System.out.println("Cartype: " + reservation.getCarType() + " \nCar-ID: " + reservation.getCarId() + " \nPeriod: " + reservation.getStartDate() + " - " + reservation.getEndDate() + " \nRentalprice: " + reservation.getRentalPrice() + ".");
-					reservations.add(reservation);
-				}
-			}
+		for(Reservation reservation : crc.getReservationsByRenter(clientName)){
+			System.out.println("Cartype: " + reservation.getCarType() + " \nCar-ID: " + reservation.getCarId() + " \nPeriod: " + reservation.getStartDate() + " - " + reservation.getEndDate() + " \nRentalprice: " + reservation.getRentalPrice() + ".");
 		}
-		return reservations;
+		return crc.getReservationsByRenter(clientName);
 	}
 
 	/**
@@ -141,12 +135,6 @@ public class Client extends AbstractTestBooking {
 	 */
 	@Override
 	protected int getNumberOfReservationsForCarType(String carType) throws Exception {
-		int i = 0;
-		for (Car car: crc.getAllCars()){
-			if (car.getType().getName().equals(carType)){
-				i += car.getAllReservations().size();
-			}
-		}
-		return i;
+		return crc.getNumberOfReservationsForCarType(carType);
 	}
 }
