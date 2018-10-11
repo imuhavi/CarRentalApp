@@ -18,6 +18,8 @@ public interface ICarRentalCompany extends Remote {
 	
 	public Quote createQuote(ReservationConstraints constraints, String guest) throws RemoteException, ReservationException;
 	
+	public Reservation confirmQuote(Quote quote) throws RemoteException, ReservationException;
+
 	public void cancelReservation(Reservation res) throws RemoteException;
 	
 }
