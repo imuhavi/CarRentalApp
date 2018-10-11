@@ -1,5 +1,6 @@
 package client;
 
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Date;
@@ -30,10 +31,11 @@ public class Client extends AbstractTestBooking {
 	}
 	
 	/***************
-	 * CONSTRUCTOR *
+	 * CONSTRUCTOR 
+	 * @throws Exception *
 	 ***************/
 	
-	public Client(String scriptFile, String carRentalCompanyName) {
+	public Client(String scriptFile, String carRentalCompanyName) throws Exception {
 		super(scriptFile);
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("TODO");
