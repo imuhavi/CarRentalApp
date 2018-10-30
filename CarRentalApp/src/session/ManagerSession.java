@@ -1,5 +1,5 @@
 package session;
 
-public class ManagerSession {
+public class ManagerSession extends IManagerSession {
 
 }
