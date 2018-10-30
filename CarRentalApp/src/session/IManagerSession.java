@@ -7,7 +7,9 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
+import rental.CarType;
 import rental.ICarRentalCompany;
 
 public interface IManagerSession extends Remote {
@@ -22,7 +24,9 @@ public interface IManagerSession extends Remote {
 	
 	public int getNbReservationCarType(String crc, String ct) throws Exception ;
 	
-	public String getBestCustomer() throws Exception ;
+	public Set<String> getBestCustomers() throws Exception ;
 	
-	public String getMostPopularCarType(String name, int year) throws Exception;
+	public CarType getMostPopularCarType(String name, int year) throws Exception;
+	
+	public int getNumberOfReservationsBy(String renter) throws Exception;
 }

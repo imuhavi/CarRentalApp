@@ -8,6 +8,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import rental.ICarRentalCompany;
 
@@ -40,5 +41,11 @@ public class CRCNamingService implements ICRCNamingService{
 		}
 		return allcrcs;
 	}
+
+	@Override
+	public Set<String> getAllNames() throws Exception {
+		return crcs.keySet();
+	}
+	
 	
 }

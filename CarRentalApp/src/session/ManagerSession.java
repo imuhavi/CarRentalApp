@@ -8,17 +8,25 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import nameserver.ICRCNamingService;
+import rental.CarType;
 import rental.ICarRentalCompany;
 
 public class ManagerSession implements IManagerSession {
 
-	ICRCNamingService ns;
+	protected ICRCNamingService ns;
+	protected String name;
+	protected String carRentalName;
 	
-	public ManagerSession() throws Exception {
+	public ManagerSession(String name, String carRentalName) throws Exception {
+		this.name = name;
+		this.carRentalName = carRentalName;
+		
 		Registry registry = LocateRegistry.getRegistry();
 		ns = (ICRCNamingService) registry.lookup("ns");
 	}
@@ -51,27 +59,46 @@ public class ManagerSession implements IManagerSession {
 	}
 
 	@Override
-	public String getBestCustomer() throws Exception {
+	public Set<String> getBestCustomers() throws Exception {
+//		ICarRentalCompany icrc = getCRC(name);
 		HashMap<String,Integer> rentres = new HashMap<String,Integer>();
 		for(ICarRentalCompany icrc : ns.getAllCRCs()){
-			for(String renter : icrc.getAllnBReservations().keySet()){
-				int val = icrc.getAllnBReservations().get(renter);
+			for(String renter : icrc.getAllNbReservations().keySet()){
+				int val = icrc.getAllNbReservations().get(renter);
 				if(rentres.containsKey(renter)) rentres.put(renter, rentres.get(renter) + val);
 				else rentres.put(renter, val);
 			}
 		}
 		
 		HashMap.Entry max = null;
+		Set<String> best = new HashSet<String>();
+		
 		for(Map.Entry entry : rentres.entrySet()){
-			if(max == null || (Integer) entry.getValue() > (Integer) max.getValue()) max = entry;
+			if(max == null || (Integer) entry.getValue() > (Integer) max.getValue()) {
+				max = entry;
+				best.clear();
+				best.add((String) entry.getKey());
+			}
+			else if ((Integer) entry.getValue() == (Integer) max.getValue()){
+				best.add((String) entry.getKey()); 
+			}
 		}
-		return (String) max.getKey();
+		return best;
 	}
 
 	@Override
-	public String getMostPopularCarType(String name, int year) throws Exception {
+	public CarType getMostPopularCarType(String name, int year) throws Exception {
 		ICarRentalCompany crc = getCRC(name);
 		return crc.getMostPopularCarTypeInYear(year);
+	}
+	
+	@Override
+	public int getNumberOfReservationsBy(String renter) throws Exception{
+		int val = 0;
+		for(ICarRentalCompany icrc : ns.getAllCRCs()){
+			val += icrc.getReservationsByRenter(renter).size();
+		}
+		return val;
 	}
 	
 	

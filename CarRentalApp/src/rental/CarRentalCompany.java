@@ -12,6 +12,8 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javafx.util.Pair;
+
 public class CarRentalCompany implements ICarRentalCompany{
 
 	private static Logger logger = Logger.getLogger(CarRentalCompany.class.getName());
@@ -106,10 +108,10 @@ public class CarRentalCompany implements ICarRentalCompany{
 		return i;
 	}
 	
-	public String getMostPopularCarTypeInYear(int year) {
-		HashMap<String,Integer> cartypesres= new HashMap<String,Integer>();
+	public CarType getMostPopularCarTypeInYear(int year) {
+		HashMap<CarType,Integer> cartypesres= new HashMap<CarType,Integer>();
 		for (Car car : getAllCars()){
-			String ct = car.getType().getName();
+			CarType ct = car.getType();
 			for(Reservation res : car.getAllReservations()){
 				int start = res.getStartDate().getYear();
 				if(start == year){
@@ -122,7 +124,23 @@ public class CarRentalCompany implements ICarRentalCompany{
 		for(Map.Entry entry : cartypesres.entrySet()){
 			if(max == null || (Integer) entry.getValue() > (Integer) max.getValue()) max = entry;
 		}
-		return (String) max.getKey();
+		return (CarType) max.getKey();
+	}
+	
+	public Pair<String,Double> getCheapestCarTypeAvailable(String region, Date start, Date end){
+		Pair<String,Double> cheapest = null;
+		double min = Double.MAX_VALUE;
+		if(getRegions().contains(region)){
+			for(Car car : getAllCars()){
+				if(car.isAvailable(start, end)) {
+					if(min > car.getType().getRentalPricePerDay()) {
+						min = car.getType().getRentalPricePerDay();
+						cheapest = new Pair<String,Double>(car.getType().getName(), car.getType().getRentalPricePerDay());
+					}
+				}
+			}
+		}
+		return cheapest;
 	}
 	
 	/*********
@@ -204,7 +222,7 @@ public class CarRentalCompany implements ICarRentalCompany{
 		return reservations;
 	}
 	
-	public HashMap<String,Integer> getAllnBReservations() {
+	public HashMap<String,Integer> getAllNbReservations() {
 		HashMap<String,Integer> rentres = new HashMap<String,Integer>();
 		for(Car car : getAllCars()){
 			for(Reservation res : car.getAllReservations()){
