@@ -5,6 +5,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -92,15 +93,18 @@ public class ReservationSession implements IReservationSession {
 
 	@Override
 	public String getCheapestCarType(String region, Date start, Date end) throws Exception {
-		Pair<String,Double> min = new Pair<String,Double>("", Double.MAX_VALUE);
+		String ct = null;
+		double min = Double.MAX_VALUE;
 		for(ICarRentalCompany icrc : ns.getAllCRCs()){
-			Pair<String,Double> pair = icrc.getCheapestCarTypeAvailable(region, start, end);
-			if(min.getValue() > pair.getValue()) min = pair;
+			HashMap<String,Double> pair = icrc.getCheapestCarTypeAvailable(region, start, end);
+			for(String key : pair.keySet()){
+				if(min > pair.get(key)) {
+					min = pair.get(key);
+					ct = key;
+				}
+			}
 		}
-		if(min.getKey().equals("")){
-			throw new NullPointerException();
-		}
-		return min.getKey();
+		return ct;
 	}
 
 }

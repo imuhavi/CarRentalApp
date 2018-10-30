@@ -8,11 +8,11 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javafx.util.Pair;
 
 public class CarRentalCompany implements ICarRentalCompany{
 
@@ -127,15 +127,16 @@ public class CarRentalCompany implements ICarRentalCompany{
 		return (CarType) max.getKey();
 	}
 	
-	public Pair<String,Double> getCheapestCarTypeAvailable(String region, Date start, Date end){
-		Pair<String,Double> cheapest = null;
+	public HashMap<String,Double> getCheapestCarTypeAvailable(String region, Date start, Date end){
+		HashMap<String,Double> cheapest = null;
 		double min = Double.MAX_VALUE;
 		if(getRegions().contains(region)){
 			for(Car car : getAllCars()){
 				if(car.isAvailable(start, end)) {
 					if(min > car.getType().getRentalPricePerDay()) {
 						min = car.getType().getRentalPricePerDay();
-						cheapest = new Pair<String,Double>(car.getType().getName(), car.getType().getRentalPricePerDay());
+						cheapest.clear();
+						cheapest.put(car.getType().getName(), car.getType().getRentalPricePerDay());
 					}
 				}
 			}

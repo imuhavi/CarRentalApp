@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-import javafx.util.Pair;
 
 public interface ICarRentalCompany extends Remote {
 
@@ -36,6 +35,6 @@ public interface ICarRentalCompany extends Remote {
 	
 	public CarType getMostPopularCarTypeInYear(int year) throws RemoteException;
 	
-	public Pair<String, Double> getCheapestCarTypeAvailable(String region, Date start, Date end) throws RemoteException;
+	public HashMap<String, Double> getCheapestCarTypeAvailable(String region, Date start, Date end) throws RemoteException;
 	
 }
