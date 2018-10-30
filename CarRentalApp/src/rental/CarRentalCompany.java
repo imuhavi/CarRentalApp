@@ -66,8 +66,8 @@ public class CarRentalCompany implements ICarRentalCompany{
 	 * CAR TYPES *
 	 *************/
 
-	public Collection<CarType> getAllCarTypes() {
-		return carTypes.values();
+	public Collection<String> getAllCarTypes() {
+		return carTypes.keySet();
 	}
 	
 	public CarType getCarType(String carTypeName) {
@@ -104,6 +104,25 @@ public class CarRentalCompany implements ICarRentalCompany{
 			}
 		}
 		return i;
+	}
+	
+	public String getMostPopularCarTypeInYear(int year) {
+		HashMap<String,Integer> cartypesres= new HashMap<String,Integer>();
+		for (Car car : getAllCars()){
+			String ct = car.getType().getName();
+			for(Reservation res : car.getAllReservations()){
+				int start = res.getStartDate().getYear();
+				if(start == year){
+					if(cartypesres.containsKey(ct)) cartypesres.put(ct, cartypesres.get(ct) + 1);
+					else cartypesres.put(ct , 1);
+				}
+			}
+		}
+		HashMap.Entry max = null;
+		for(Map.Entry entry : cartypesres.entrySet()){
+			if(max == null || (Integer) entry.getValue() > (Integer) max.getValue()) max = entry;
+		}
+		return (String) max.getKey();
 	}
 	
 	/*********
@@ -183,6 +202,19 @@ public class CarRentalCompany implements ICarRentalCompany{
 			}
 		}
 		return reservations;
+	}
+	
+	public HashMap<String,Integer> getAllnBReservations() {
+		HashMap<String,Integer> rentres = new HashMap<String,Integer>();
+		for(Car car : getAllCars()){
+			for(Reservation res : car.getAllReservations()){
+				String renter = res.getCarRenter();
+				int val = 0;
+				if(rentres.get(renter) != null) val = rentres.get(renter);
+				rentres.put(renter, val+1);
+			}
+		}
+		return rentres;
 	}
 	
 	@Override

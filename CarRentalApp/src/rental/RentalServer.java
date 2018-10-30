@@ -17,7 +17,8 @@ public class RentalServer {
 			NumberFormatException, IOException {
 		System.setSecurityManager(null);
 		
-		CrcData data  = loadData("hertz.csv");
+		//give databasename
+		CrcData data  = loadData(args[0]);
 		CarRentalCompany crc = new CarRentalCompany(data.name, data.regions, data.cars);
 		
 		ICarRentalCompany stub = (ICarRentalCompany) UnicastRemoteObject.exportObject(crc,0);

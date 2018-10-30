@@ -1,37 +1,44 @@
 package nameserver;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.rmi.AlreadyBoundException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.rmi.Remote;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
-import rental.CarRentalCompany;
 import rental.ICarRentalCompany;
-import rental.ReservationException;
 
-public class CRCNamingService implements Remote{
+public class CRCNamingService implements ICRCNamingService{
 
-	public static void main(String[] args) {
-		System.setSecurityManager(null);
+	HashMap<String, ICarRentalCompany> crcs;
+	
+	public CRCNamingService(){
+		crcs = new HashMap<String, ICarRentalCompany>();
 	}
 	
 	public void addCRC(ICarRentalCompany crc, String name) throws MalformedURLException, RemoteException, AlreadyBoundException{
 		ICarRentalCompany stub = (ICarRentalCompany) UnicastRemoteObject.exportObject(crc,0);
-		Naming.rebind(name, stub);
-		
+		crcs.put(name, stub);
 	}
 	
 	public void removeCRC(String name) throws RemoteException, MalformedURLException, NotBoundException {
-		Naming.unbind(name);
+		crcs.remove(name);
 	}
 	
 	public ICarRentalCompany getCRC(String name) throws MalformedURLException, RemoteException, NotBoundException{
-		return (ICarRentalCompany) Naming.lookup(name);
+		return (ICarRentalCompany) crcs.get(name);
+	}
+	
+	public List<ICarRentalCompany> getAllCRCs() throws Exception {
+		List<ICarRentalCompany> allcrcs = new ArrayList<ICarRentalCompany>();
+		for(String name : crcs.keySet()){
+			System.out.println(name);
+			allcrcs.add(getCRC(name));
+		}
+		return allcrcs;
 	}
 	
 }

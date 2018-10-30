@@ -4,12 +4,13 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
 public interface ICarRentalCompany extends Remote {
 
-	public Collection<CarType> getAllCarTypes() throws RemoteException;
+	public Collection<String> getAllCarTypes() throws RemoteException;
 	
 	public CarType getCarType(String carTypeName) throws RemoteException;
 	
@@ -28,5 +29,9 @@ public interface ICarRentalCompany extends Remote {
 	public List<Reservation> getReservationsByRenter(String clientName) throws RemoteException;
 	
 	public int getNumberOfReservationsForCarType(String carType) throws RemoteException;
+	
+	public HashMap<String,Integer> getAllnBReservations() throws RemoteException;
+	
+	public String getMostPopularCarTypeInYear(int year) throws RemoteException;
 	
 }
