@@ -98,7 +98,7 @@ public class ReservationSession implements IReservationSession {
 		for(ICarRentalCompany icrc : ns.getAllCRCs()){
 			HashMap<String,Double> pair = icrc.getCheapestCarTypeAvailable(region, start, end);
 			for(String key : pair.keySet()){
-				if(min > pair.get(key)) {
+				if(min > pair.get(key) || key == null) {
 					min = pair.get(key);
 					ct = key;
 				}

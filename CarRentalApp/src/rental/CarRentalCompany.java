@@ -108,32 +108,49 @@ public class CarRentalCompany implements ICarRentalCompany{
 		return i;
 	}
 	
-	public CarType getMostPopularCarTypeInYear(int year) {
-		HashMap<CarType,Integer> cartypesres= new HashMap<CarType,Integer>();
+	@SuppressWarnings("deprecation")
+	public CarType getMostPopularCarTypeInYear(int year) throws Exception {
+		HashMap<CarType,Integer> cartypesres = new HashMap<CarType,Integer>();
 		for (Car car : getAllCars()){
 			CarType ct = car.getType();
 			for(Reservation res : car.getAllReservations()){
-				int start = res.getStartDate().getYear();
-				if(start == year){
+				Date start = res.getStartDate();
+				if(start.after(new Date(year-1900, 0, 1)) && start.before(new Date(year-1900, 12, 31))){
 					if(cartypesres.containsKey(ct)) cartypesres.put(ct, cartypesres.get(ct) + 1);
 					else cartypesres.put(ct , 1);
 				}
 			}
 		}
-		HashMap.Entry max = null;
-		for(Map.Entry entry : cartypesres.entrySet()){
-			if(max == null || (Integer) entry.getValue() > (Integer) max.getValue()) max = entry;
+		
+//		HashMap<CarType,Integer> max = new HashMap<CarType,Integer>();
+//		int maxValue = 0;
+		Map.Entry<CarType, Integer> max = null;
+		for(Map.Entry<CarType,Integer> entry : cartypesres.entrySet()){
+//			is leeg...
+			if(max == null || entry.getValue() > max.getValue()) {
+//				max.clear();
+				max = entry;
+//				max.put(entry.getKey(), entry.getValue());
+			}
+//			else if (entry.getValue() == maxValue){
+//				max.put(entry.getKey(), entry.getValue());
+//			}
 		}
+		/*
+		if(max.isEmpty()){
+			throw new Exception("No cars reserved in that year.");
+		}
+		*/
 		return (CarType) max.getKey();
 	}
 	
 	public HashMap<String,Double> getCheapestCarTypeAvailable(String region, Date start, Date end){
-		HashMap<String,Double> cheapest = null;
+		HashMap<String,Double> cheapest = new HashMap<String,Double>();
 		double min = Double.MAX_VALUE;
 		if(getRegions().contains(region)){
 			for(Car car : getAllCars()){
 				if(car.isAvailable(start, end)) {
-					if(min > car.getType().getRentalPricePerDay()) {
+					if(min > car.getType().getRentalPricePerDay() || cheapest.isEmpty()) {
 						min = car.getType().getRentalPricePerDay();
 						cheapest.clear();
 						cheapest.put(car.getType().getName(), car.getType().getRentalPricePerDay());

@@ -70,10 +70,10 @@ public class ManagerSession implements IManagerSession {
 			}
 		}
 		
-		HashMap.Entry max = null;
+		HashMap.Entry<String,Integer> max = null;
 		Set<String> best = new HashSet<String>();
 		
-		for(Map.Entry entry : rentres.entrySet()){
+		for(Map.Entry<String,Integer> entry : rentres.entrySet()){
 			if(max == null || (Integer) entry.getValue() > (Integer) max.getValue()) {
 				max = entry;
 				best.clear();
