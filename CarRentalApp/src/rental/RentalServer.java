@@ -3,6 +3,8 @@ package rental;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.rmi.AlreadyBoundException;
+import java.rmi.NotBoundException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
@@ -11,19 +13,34 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import nameserver.CRCNamingService;
+import nameserver.ICRCNamingService;
+
 public class RentalServer {
 	
 	public static void main(String[] args) throws ReservationException,
-			NumberFormatException, IOException {
+			NumberFormatException, IOException, AlreadyBoundException, NotBoundException {
 		System.setSecurityManager(null);
 		
-		//give databasename
-		CrcData data  = loadData(args[0]);
-		CarRentalCompany crc = new CarRentalCompany(data.name, data.regions, data.cars);
+		ICRCNamingService incrc = (ICRCNamingService) new CRCNamingService();
 		
-		ICarRentalCompany stub = (ICarRentalCompany) UnicastRemoteObject.exportObject(crc,0);
+		ICRCNamingService namingstub = (ICRCNamingService) UnicastRemoteObject.exportObject(incrc,0);
 		Registry registry = LocateRegistry.getRegistry();
-		registry.rebind(data.name, stub);
+		registry.rebind("ns", namingstub);
+		
+		ICRCNamingService ns = (ICRCNamingService) registry.lookup("ns");
+		//give databasename
+		CrcData data1 = loadData("Hertz.csv");
+		CarRentalCompany crc1 = new CarRentalCompany(data1.name, data1.regions, data1.cars);
+		
+		ICarRentalCompany stub1 = (ICarRentalCompany) UnicastRemoteObject.exportObject(crc1,0);
+		ns.addCRC(stub1, data1.name);
+		
+		CrcData data2 = loadData("Dockx.csv");
+		CarRentalCompany crc2 = new CarRentalCompany(data2.name, data2.regions, data2.cars);
+		
+		ICarRentalCompany stub2 = (ICarRentalCompany) UnicastRemoteObject.exportObject(crc2,0);
+		ns.addCRC(stub2, data2.name);
 	}
 
 	public static CrcData loadData(String datafile)

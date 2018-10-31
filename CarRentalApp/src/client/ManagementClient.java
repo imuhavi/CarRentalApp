@@ -20,6 +20,14 @@ public class ManagementClient extends AbstractTestManagement<ReservationSession,
 
 	ICRCNamingService ns;
 	
+	public static void main(String args[]) throws Exception{
+		System.setSecurityManager(null);
+		
+		ManagementClient manclient = new ManagementClient("trips");
+		
+		manclient.run();
+	}
+	
 	public ManagementClient(String scriptFile) throws Exception {
 		super(scriptFile);
 		Registry registry = LocateRegistry.getRegistry();
