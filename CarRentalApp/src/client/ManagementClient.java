@@ -71,8 +71,7 @@ public class ManagementClient extends AbstractTestManagement<ReservationSession,
 	@Override
 	protected void addQuoteToSession(ReservationSession session, String name, Date start, Date end, String carType,
 			String region) throws Exception {
-		ReservationConstraints constraints = new ReservationConstraints(start, end, carType, region);
-		session.createQuote(constraints, name);
+		session.createQuote(name, start, end, carType, region, name);
 	}
 
 	@Override
