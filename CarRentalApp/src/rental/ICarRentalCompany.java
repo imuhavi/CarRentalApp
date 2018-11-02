@@ -33,7 +33,7 @@ public interface ICarRentalCompany extends Remote {
 	
 	public HashMap<String,Integer> getAllNbReservations() throws RemoteException;
 	
-	public CarType getMostPopularCarTypeInYear(int year) throws RemoteException;
+	public CarType getMostPopularCarTypeInYear(int year) throws RemoteException, Exception;
 	
 	public HashMap<String, Double> getCheapestCarTypeAvailable(String region, Date start, Date end) throws RemoteException;
 	

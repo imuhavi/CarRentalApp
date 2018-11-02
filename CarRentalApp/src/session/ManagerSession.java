@@ -1,15 +1,10 @@
 package session;
 
-import java.net.MalformedURLException;
-import java.rmi.AlreadyBoundException;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -70,10 +65,10 @@ public class ManagerSession implements IManagerSession {
 			}
 		}
 		
-		HashMap.Entry max = null;
+		HashMap.Entry<String,Integer> max = null;
 		Set<String> best = new HashSet<String>();
 		
-		for(Map.Entry entry : rentres.entrySet()){
+		for(Map.Entry<String,Integer> entry : rentres.entrySet()){
 			if(max == null || (Integer) entry.getValue() > (Integer) max.getValue()) {
 				max = entry;
 				best.clear();

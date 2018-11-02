@@ -42,8 +42,8 @@ public class ReservationSession implements IReservationSession {
 	}
 
 	@Override
-	public Quote createQuote(ReservationConstraints constraints, String guest)
-			throws Exception {
+	public Quote createQuote(String name, Date start, Date end, String carType, String region, String guest) throws Exception {
+		ReservationConstraints constraints = new ReservationConstraints(start, end, carType, region);
 		Quote q;
 		for(ICarRentalCompany icrc : ns.getAllCRCs()){
 			try{
@@ -97,7 +97,7 @@ public class ReservationSession implements IReservationSession {
 		for(ICarRentalCompany icrc : ns.getAllCRCs()){
 			HashMap<String,Double> pair = icrc.getCheapestCarTypeAvailable(region, start, end);
 			for(String key : pair.keySet()){
-				if(min > pair.get(key)) {
+				if(min > pair.get(key) || key == null) {
 					min = pair.get(key);
 					ct = key;
 				}

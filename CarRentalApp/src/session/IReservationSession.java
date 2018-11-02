@@ -9,9 +9,11 @@ import java.util.Set;
 import rental.*;
 
 public interface IReservationSession extends Remote {
+	
 	public Set<CarType> getAvailableCarTypes(Date start, Date end) throws RemoteException, Exception;
 	
-	public Quote createQuote(ReservationConstraints constraints, String guest) throws RemoteException, ReservationException, Exception;
+	public Quote createQuote(String name, Date start, Date end, String carType,
+			String region, String guest) throws RemoteException, ReservationException, Exception;
 	
 	public List<Reservation> confirmQuotes() throws RemoteException, ReservationException, Exception;
 	
