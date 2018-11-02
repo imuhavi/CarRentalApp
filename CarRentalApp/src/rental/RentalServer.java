@@ -15,20 +15,19 @@ import java.util.StringTokenizer;
 
 import nameserver.CRCNamingService;
 import nameserver.ICRCNamingService;
+import nameserver.NamingServer;
 
 public class RentalServer {
 	
-	public static void main(String[] args) throws ReservationException,
-			NumberFormatException, IOException, AlreadyBoundException, NotBoundException {
+	public static void main(String[] args) throws Exception {
 		System.setSecurityManager(null);
 		
-		ICRCNamingService incrc = (ICRCNamingService) new CRCNamingService();
+		NamingServer.main();
+//		SessionServer.main();
 		
-		ICRCNamingService namingstub = (ICRCNamingService) UnicastRemoteObject.exportObject(incrc,0);
 		Registry registry = LocateRegistry.getRegistry();
-		registry.rebind("ns", namingstub);
-		
 		ICRCNamingService ns = (ICRCNamingService) registry.lookup("ns");
+		
 		//give databasename
 		CrcData data1 = loadData("Hertz.csv");
 		CarRentalCompany crc1 = new CarRentalCompany(data1.name, data1.regions, data1.cars);
